@@ -15,11 +15,8 @@ public:
     Train* merge(Train* train1, Train* train2);
     bool reverse(Train* train, int startId, int endId);
 
-    // Getters
     const std::string& getName() const { return name_; }
     const std::string& getLocation() const { return location_; }
-
-    // 序列化支持
     nlohmann::json toJson() const;
     static TimePortal fromJson(const nlohmann::json& j);
 
