@@ -10,11 +10,11 @@ Train::Train() {
 
 Train::~Train() {
     clearAll();
-    delete head_;  // 删除哨兵节点
+    delete head_;  //delete哨兵节点
 }
 
 void Train::init() {
-    head_ = Car::createSentinel();  // 使用新的静态方法创建哨兵节点
+    head_ = Car::createSentinel();
     head_->next_ = head_;
     head_->prev_ = head_;
     tail_ = head_;
@@ -27,7 +27,7 @@ void Train::clearAll() {
         return;
     }
     
-    // 如果是循环列车，先断开循环
+    //先断开循环
     if (isLoop_) {
         breakLoop();
     }
@@ -38,7 +38,6 @@ void Train::clearAll() {
         delete current;
         current = next;
     }
-    
     head_->next_ = head_;
     head_->prev_ = head_;
     tail_ = head_;
@@ -52,7 +51,7 @@ void Train::copyFrom(const Train& other) {
     
     Car* otherCurrent = other.head_->next_;
     while (otherCurrent != other.head_) {
-        Car* newCar = new Car(*otherCurrent);  // 使用拷贝构造函数
+        Car* newCar = new Car(*otherCurrent);
         addBack(newCar);
         otherCurrent = otherCurrent->next_;
     }
@@ -262,25 +261,21 @@ Train* Train::split(int startId) {
     }
     std::cout << "找到分裂点车厢：ID = " << splitPoint->getId() << std::endl;
     
-    // 创建新列车
     Train* newTrain = new Train();
     std::cout << "创建新列车成功" << std::endl;
-    
-    // 如果是循环列车，先断开循环
     bool wasLoop = isLoop_;
     if (isLoop_) {
         std::cout << "断开循环列车" << std::endl;
         breakLoop();
     }
     
-    // 保存分割点前后的连接
     Car* beforeSplit = splitPoint->prev_;
     Car* afterSplit = splitPoint;
     
     std::cout << "分裂点前车厢ID: " << (beforeSplit == head_ ? "哨兵" : std::to_string(beforeSplit->getId())) << std::endl;
     std::cout << "分裂点后车厢ID: " << afterSplit->getId() << std::endl;
     
-    // 计算新列车的大小并找到尾部
+    // 找到尾部
     size_t newSize = 0;
     Car* current = afterSplit;
     Car* newTail = nullptr;
@@ -303,16 +298,14 @@ Train* Train::split(int startId) {
         delete newTrain;
         throw std::runtime_error("分割点无效");
     }
-    
-    // 更新原列车的连接
+
     std::cout << "更新原列车连接..." << std::endl;
     beforeSplit->next_ = head_;
     head_->prev_ = beforeSplit;
     tail_ = beforeSplit;
     size_ -= newSize;
     std::cout << "原列车新大小: " << size_ << std::endl;
-    
-    // 更新新列车的连接
+
     std::cout << "更新新列车连接..." << std::endl;
     afterSplit->prev_ = newTrain->head_;
     newTrain->head_->next_ = afterSplit;
@@ -321,13 +314,11 @@ Train* Train::split(int startId) {
     newTrain->tail_ = newTail;
     newTrain->size_ = newSize;
     
-    // 如果原列车是循环的，新列车也设为循环
     if (wasLoop) {
         std::cout << "重新设置循环状态..." << std::endl;
         makeLoop();
         newTrain->makeLoop();
     }
-    
     std::cout << "分裂完成。原列车大小: " << size_ << ", 新列车大小: " << newTrain->size_ << std::endl;
     return newTrain;
 }
@@ -342,28 +333,24 @@ void Train::merge(Train* other) {
         return;
     }
     
-    // 如果两个列车都是循环的，先断开循环
     bool thisWasLoop = isLoop_;
     bool otherWasLoop = other->isLoop_;
     if (isLoop_) breakLoop();
     if (other->isLoop_) other->breakLoop();
     
-    // 连接两个列车
+    // 连 接两个列车
     tail_->next_ = other->head_->next_;
     other->head_->next_->prev_ = tail_;
     other->tail_->next_ = head_;
     head_->prev_ = other->tail_;
     tail_ = other->tail_;
     
-    // 更新大小
     size_ += other->size_;
     
-    // 如果任一列车是循环的，合并后的列车也设为循环
     if (thisWasLoop || otherWasLoop) {
         makeLoop();
     }
-    
-    // 清理other列车（但不删除车厢）
+
     other->head_->next_ = other->head_;
     other->head_->prev_ = other->head_;
     other->tail_ = other->head_;
@@ -379,7 +366,6 @@ bool Train::reverse(int startId, int endId) {
         return false;
     }
     
-    // 检查end是否在start之后
     Car* current = start;
     bool found = false;
     do {
@@ -393,12 +379,9 @@ bool Train::reverse(int startId, int endId) {
     if (!found) {
         return false;
     }
-    
-    // 保存区间前后的节点
+
     Car* beforeStart = start->prev_;
     Car* afterEnd = end->next_;
-    
-    // 反转指定区间的指针
     current = start;
     Car* prev = nullptr;
     Car* next = nullptr;
@@ -411,13 +394,11 @@ bool Train::reverse(int startId, int endId) {
         current = next;
     } while (prev != end);
     
-    // 重新连接区间与列车
     beforeStart->next_ = end;
     end->prev_ = beforeStart;
     start->next_ = afterEnd;
     afterEnd->prev_ = start;
-    
-    // 如果反转区间包含尾节点，更新尾节点
+
     if (tail_ == end) {
         tail_ = start;
     }
@@ -429,26 +410,21 @@ void Train::sort(SortType type, SortOrder order) {
     if (size_ <= 1) {
         return;
     }
-    
-    // 将车厢节点存入vector以便排序
+
     std::vector<Car*> cars;
     Car* current = head_->next_;
     while (current != head_) {
         cars.push_back(current);
         current = current->next_;
     }
-    
-    // 定义比较函数
+
     auto comparator = [type, order](Car* a, Car* b) {
         double valueA = (type == SortType::WEIGHT) ? a->getWeight() : a->getLength();
         double valueB = (type == SortType::WEIGHT) ? b->getWeight() : b->getLength();
         return (order == SortOrder::ASC) ? (valueA < valueB) : (valueA > valueB);
     };
-    
-    // 排序
     std::sort(cars.begin(), cars.end(), comparator);
     
-    // 重新连接节点
     head_->next_ = cars[0];
     cars[0]->prev_ = head_;
     
