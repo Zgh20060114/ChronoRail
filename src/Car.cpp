@@ -9,7 +9,6 @@ Car::Car(int id, std::string type, double weight, double length) {
     std::cout << "DEBUG: weight = " << weight << std::endl;
     std::cout << "DEBUG: length = " << length << std::endl;
 
-    // 先验证参数
     if (id < 0) {
         throw std::invalid_argument("车厢ID不能为负数");
     }
@@ -23,7 +22,6 @@ Car::Car(int id, std::string type, double weight, double length) {
         throw std::invalid_argument("车厢类型不能为空");
     }
 
-    // 验证通过后再初始化成员变量
     id_ = id;
     type_ = std::move(type);
     weight_ = weight;
@@ -33,7 +31,6 @@ Car::Car(int id, std::string type, double weight, double length) {
     next_ = nullptr;
 }
 
-// 新增：私有构造函数，用于创建哨兵节点
 Car::Car(bool isSentinel) 
     : id_(-1)
     , type_("sentinel")
@@ -44,7 +41,7 @@ Car::Car(bool isSentinel)
     , next_(nullptr) {
 }
 
-// 新增：创建哨兵节点的静态方法
+//创建哨兵节点的静态方法
 Car* Car::createSentinel() {
     return new Car(true);
 }
@@ -55,7 +52,7 @@ Car::Car(const Car& other)
     , weight_(other.weight_)
     , length_(other.length_)
     , timestamp_(other.timestamp_)
-    , prev_(nullptr)  // 不复制指针，由Train类管理
+    , prev_(nullptr)  //不复制指针，由Train类管理
     , next_(nullptr) {
 }
 
@@ -66,7 +63,6 @@ Car& Car::operator=(const Car& other) {
         weight_ = other.weight_;
         length_ = other.length_;
         timestamp_ = other.timestamp_;
-        // 不复制prev_和next_指针，由Train类管理
     }
     return *this;
 }
