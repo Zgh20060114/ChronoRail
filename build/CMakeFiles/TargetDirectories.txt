@@ -1,3 +1,0 @@
-/home/zgh/CPP_Projects/ChronoRail/build/CMakeFiles/chronorail.dir
-/home/zgh/CPP_Projects/ChronoRail/build/CMakeFiles/edit_cache.dir
-/home/zgh/CPP_Projects/ChronoRail/build/CMakeFiles/rebuild_cache.dir

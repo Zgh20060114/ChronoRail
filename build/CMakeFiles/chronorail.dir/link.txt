@@ -1,1 +1,0 @@
-/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/chronorail.dir/link.d CMakeFiles/chronorail.dir/src/Car.cpp.o CMakeFiles/chronorail.dir/src/ChronoRailSystem.cpp.o CMakeFiles/chronorail.dir/src/TimePortal.cpp.o CMakeFiles/chronorail.dir/src/Train.cpp.o CMakeFiles/chronorail.dir/src/main.cpp.o -o chronorail
