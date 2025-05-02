@@ -1,0 +1,43 @@
+{
+    "nextTrainId": 5,
+    "trains": {
+        "2": {
+            "cars": [],
+            "isLoop": false,
+            "size": 0
+        },
+        "3": {
+            "cars": [
+                {
+                    "id": 103,
+                    "length": 18.0,
+                    "timestamp": 1746100129,
+                    "type": "dining",
+                    "weight": 45.0
+                }
+            ],
+            "isLoop": false,
+            "size": 1
+        },
+        "4": {
+            "cars": [
+                {
+                    "id": 101,
+                    "length": 20.0,
+                    "timestamp": 1746100116,
+                    "type": "passenger",
+                    "weight": 50.5
+                },
+                {
+                    "id": 102,
+                    "length": 25.0,
+                    "timestamp": 1746100124,
+                    "type": "cargo",
+                    "weight": 80.0
+                }
+            ],
+            "isLoop": false,
+            "size": 2
+        }
+    }
+}
